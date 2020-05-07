@@ -8,8 +8,9 @@ var cors = require('cors');
 var connection = mysql.createConnection({
     host     : 'localhost',
     user     : 'root',
-    password : '',
-    database : 'swagnesdev'  
+    password : 'Aznstreet123!',
+    database : 'swagnesdev',
+    insecureAuth : true 
 });
 
 connection.connect(function(err) {
@@ -31,11 +32,11 @@ var server = app.listen(2999, "localhost", function() {
 
 // code to insert data
 app.post('/Join', (req, res) => {
-    const name = req.params.name;
+    const name = req.body.name;
     console.log(name);
-    const password = req.params.password;
+    const password = req.body.password;
     console.log(password);
-    const email = req.params.email;
+    const email = req.body.email;
     console.log(email);
     const REGISTER_USER_QUERY = `INSERT INTO users (name, password, email) VALUES ('${name}', '${password}', '${email}');`;
     connection.query(REGISTER_USER_QUERY, (err, results) => {

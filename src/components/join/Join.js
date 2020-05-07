@@ -71,15 +71,15 @@ class Join extends React.Component {
                     <div className="prompt-title">Registration</div>
                     <div>
                         <label htmlFor="name">Name</label>
-                        <input className="text" name="name" type="text" onChange = {this.handleNameChange}/>
+                        <input className="text" name="name" type="text" value={this.state.name} onChange = {this.handleNameChange}/>
                     </div>
                     <div>
                         <label htmlFor="password">Password</label>
-                        <input className="password" name="password" type="password" onChange = {this.handlePwChange}/>
+                        <input className="password" name="password" type="password" value={this.state.password} onChange = {this.handlePwChange}/>
                     </div>
                     <div>
                         <label htmlFor="email">Email</label>
-                        <input className="text" name="email" type="text" onChange = {this.handleEmailChange}/>
+                        <input className="text" name="email" type="text" value={this.state.email} onChange = {this.handleEmailChange}/>
                     </div>
                     {alert}
                     <input className="button" type="submit" value="Register" />
