@@ -5,12 +5,20 @@ class Join extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            name : '',
+            password : '',
+            email: ''
+        };
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handleNameChange = this.handleNameChange.bind(this);
         this.handlePwChange = this.handlePwChange.bind(this);
     }
 
+    resetForm = () => {
+        this.setState({name : "", password : "", email : ""});
+    }
+    
     register(event) {
         event.preventDefault();
 
@@ -28,7 +36,9 @@ class Join extends React.Component {
             } else {
                 console.log("Failed to Register");
                 console.log(response.data.error);
+                this.props.close();
             }
+            this.resetForm();
         });
     }
 
