@@ -1,41 +1,52 @@
 import React from 'react';
 import Axios from 'axios';
-import Config from '../../Config';
-import ReCAPTCHA from 'react-google-recaptcha';
 
 class Join extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            error: []
-        };
+        this.state = {};
+        this.handleEmailChange = this.handleEmailChange.bind(this);
+        this.handleNameChange = this.handleNameChange.bind(this);
+        this.handlePwChange = this.handlePwChange.bind(this);
     }
 
     register(event) {
         event.preventDefault();
 
-        var form = new FormData(this.refs.form);
-
-        Axios.post('join', form).then((response) => {
+        let newUser = {
+          name : this.state.name,
+          password : this.state.password,
+          email : this.state.email
+        }
+        Axios.post('http://localhost:2999/Join', newUser).then((response) => {
             console.log(response.data);
 
             if (response.data.success) {
-                console.log("Success");
-                this.props.openPopup("Welcome!", "Your account has been registered successfully. We're glad to have you on board!");
+                console.log("Successful Register");
                 this.props.close();
             } else {
-                this.setState({error: response.data.error});
-                this.recaptcha.reset();
-
+                console.log("Failed to Register");
                 console.log(response.data.error);
-                console.log("Failure");
             }
         });
     }
 
-    recaptchaOnChange(value) {
-        console.log("Captcha value:", value);
+    handleClick(event) {
+        this.props.close();
+        this.props.openReset();
+    }
+
+    handleNameChange(event) {
+        this.setState({name : event.target.value});
+    }
+
+    handlePwChange(event) {
+      this.setState({password : event.target.value});
+    }
+
+    handleEmailChange(event) {
+      this.setState({email : event.target.value});
     }
 
     render() {
@@ -46,44 +57,32 @@ class Join extends React.Component {
             return null;
         }
 
+        /*
         if (this.state.error.length) {
             var alert = (
                 <div className="alert">{this.state.error}</div>
             );
-        }
+        }*/
 
         return (
-            <div className="join">
+            <div className="login">
                 <form onSubmit={this.register.bind(this)} ref="form">
                     <div className="prompt-close" onClick={this.props.close}>&#10006;</div>
-                    <div className="prompt-title">Join {Config.server_name}</div>
+                    <div className="prompt-title">Registration</div>
                     <div>
                         <label htmlFor="name">Name</label>
-                        <input className="text" name="name" type="text" />
-                    </div>
-                    <div>
-                        <label htmlFor="email">Email</label>
-                        <input className="text" name="email" type="email" />
-                    </div>
-                    <div>
-                        <label htmlFor="mapleid">MapleID</label>
-                        <input className="text" name="mapleid" type="text" />
+                        <input className="text" name="name" type="text" onChange = {this.handleNameChange}/>
                     </div>
                     <div>
                         <label htmlFor="password">Password</label>
-                        <input className="password" name="password" type="password" />
+                        <input className="password" name="password" type="password" onChange = {this.handlePwChange}/>
                     </div>
                     <div>
-                        <label htmlFor="confirm">Confirm</label>
-                        <input className="confirm" name="password_confirmation" type="password" />
-                    </div>
-                    <div className="repatcha-container">
-                        <ReCAPTCHA className="recaptcha" ref={r => this.recaptcha = r} onChange={this.recaptchaOnChange} sitekey={Config.recaptcha_key} />
+                        <label htmlFor="email">Email</label>
+                        <input className="text" name="email" type="text" onChange = {this.handleEmailChange}/>
                     </div>
                     {alert}
-                    <div>
-                        <input className="button" type="submit" value="Join" />
-                    </div>
+                    <input className="button" type="submit" value="Register" />
                 </form>
             </div>
         );
